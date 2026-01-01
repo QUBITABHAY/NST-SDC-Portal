@@ -309,17 +309,12 @@ const Calendar = () => {
             <header className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white/80 backdrop-blur-md sticky top-0 z-20 shadow-sm transition-all">
                 <div className="flex items-center space-x-6">
                     <div
-                        className="flex items-center text-gray-600 hover:bg-gray-100 p-2 rounded-full cursor-pointer transition-colors duration-200"
+                        className="flex items-center text-gray-600 hover:bg-gray-100 p-2 rounded-full cursor-pointer transition-colors duration-200 mr-2"
                         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                     >
                         <Menu className="w-6 h-6" />
                     </div>
-                    <div className="flex items-center space-x-3 group cursor-default">
-                        <div className="w-10 h-10 flex items-center justify-center bg-blue-50 rounded-xl group-hover:bg-blue-100 transition-colors duration-300">
-                            <CalendarIcon className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <span className="text-2xl font-bold text-gray-800 tracking-tight hidden sm:block">Calendar</span>
-                    </div>
+
 
                     <button
                         onClick={() => {
@@ -327,7 +322,7 @@ const Calendar = () => {
                             setCurrentDate(now);
                             setMiniCurrentDate(now);
                         }}
-                        className="ml-8 px-5 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm active:scale-95 transition-all duration-200"
+                        className="px-5 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm active:scale-95 transition-all duration-200"
                     >
                         Today
                     </button>
