@@ -48,26 +48,21 @@ nstsdc-portal/
 - **ESLint** - Code linting
 
 ### Backend
-- **Node.js** - Runtime environment
-- **Express** 5.1.0 - Web framework
-- **Passport** 0.7.0 - Authentication middleware
-- **Passport-GitHub** 1.1.0 - GitHub OAuth strategy
-- **JWT** (jsonwebtoken 9.0.2) - Token-based authentication
-- **Prisma**  - Prisma ODM
-- **CORS** 2.8.5 - Cross-origin resource sharing
-- **dotenv** 17.2.3 - Environment variable management
-- **Database** - Postgres
+- **Python** 3.11+ - Programming language
+- **Django** 5.2.8 - Web framework
+- **Django REST Framework** 3.16.1 - API toolkit
+- **uv** - Python package manager
+- **Pillow** - Image processing
 
 ### Development Tools
-- **Nodemon** 3.1.10 - Auto-restart on file changes
+- **Ruff** (optional) - Python linting and formatting
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
-- MongoDB instance (for database)
-- GitHub OAuth App credentials
+- Node.js (v18 or higher)
+- Python 3.11 or higher
+- [uv](https://github.com/astral-sh/uv) (recommended for Python dependency management)
 
 ### Installation
 
@@ -79,13 +74,17 @@ nstsdc-portal/
 
 2. **Install Dependencies**
 
-   Install server dependencies:
+   **Server (Python/Django):**
    ```bash
    cd server
-   npm install
+   # using uv (recommended)
+   uv sync
+   
+   # OR using pip
+   python -m pip install -r requirements.txt
    ```
 
-   Install client dependencies:
+   **Client (React/Vite):**
    ```bash
    cd ../client
    npm install
@@ -95,37 +94,27 @@ nstsdc-portal/
 
    Create a `.env` file in the `server` directory:
    ```env
-   # Server Configuration
-   PORT=3000
-
-   # GitHub OAuth
-   GITHUB_CLIENT_ID=your_github_client_id
-   GITHUB_CLIENT_SECRET=your_github_client_secret
-   GITHUB_CALLBACK_URL=http://localhost:3000/auth/github/callback
-
-   # JWT
-   JWT_SECRET=your_jwt_secret_key
-
-   # Client URL (for CORS)
-   CLIENT_URL=http://localhost:5173
+   # Django Settings
+   DEBUG=True
+   SECRET_KEY=your_secret_key
+   ALLOWED_HOSTS=localhost,127.0.0.1
+   
+   # Database (if using Postgres, otherwise defaults to SQLite)
+   # DATABASE_URL=postgres://user:password@localhost:5432/dbname
    ```
-
-   **Setting up GitHub OAuth:**
-   1. Go to GitHub Settings > Developer settings > OAuth Apps
-   2. Create a new OAuth App
-   3. Set Authorization callback URL to `http://localhost:3000/auth/github/callback`
-   4. Copy Client ID and Client Secret to your `.env` file
 
 ### Running the Application
 
 1. **Start the Backend Server**
    ```bash
    cd server
-   npm start
-   # Or use nodemon for development:
-   npx nodemon index.js
+   # using uv
+   uv run python manage.py runserver
+   
+   # OR using standard python
+   python manage.py runserver
    ```
-   Server will run on http://localhost:3000
+   Server will run on http://localhost:8000
 
 2. **Start the Frontend Development Server**
    ```bash
@@ -134,30 +123,17 @@ nstsdc-portal/
    ```
    Client will run on http://localhost:5173
 
-### Build for Production
-
-Build the frontend:
-```bash
-cd client
-npm run build
-```
-
-Preview production build:
-```bash
-npm run preview
-```
-
 ## Development
 
 ### Frontend Development
 - The client uses Vite with React and Hot Module Replacement (HMR)
 - Edit files in `client/src/` and changes will reflect immediately
-- Run `npm run lint` to check for linting errors
 
 ### Backend Development
-- The server uses Express with a basic static file serving setup
-- Use nodemon for automatic server restarts during development
-- API endpoints can be added in `server/index.js`
+- The server is built with Django and Django REST Framework
+- Changes to Python files will auto-reload the server
+- Run migrations: `uv run python manage.py migrate`
+- Create superuser: `uv run python manage.py createsuperuser`
 
 ## Basic Flow Diagram
 
