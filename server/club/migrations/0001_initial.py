@@ -4,65 +4,168 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Attendance',
+            name="Attendance",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('marked_at', models.DateTimeField(auto_now_add=True)),
-                ('status', models.CharField(choices=[('present', 'Present'), ('absent', 'Absent'), ('excused', 'Excused')], default='present', max_length=20)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("marked_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("present", "Present"),
+                            ("absent", "Absent"),
+                            ("excused", "Excused"),
+                        ],
+                        default="present",
+                        max_length=20,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Event',
+            name="Event",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('description', models.TextField()),
-                ('event_type', models.CharField(choices=[('workshop', 'Workshop'), ('hackathon', 'Hackathon'), ('meetup', 'Meetup'), ('webinar', 'Webinar'), ('other', 'Other')], default='meetup', max_length=20)),
-                ('event_date', models.DateTimeField()),
-                ('location', models.CharField(help_text='Physical location or Online', max_length=200)),
-                ('meeting_link', models.URLField(blank=True, null=True)),
-                ('banner', models.ImageField(blank=True, null=True, upload_to='event_banners/')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                ("description", models.TextField()),
+                (
+                    "event_type",
+                    models.CharField(
+                        choices=[
+                            ("workshop", "Workshop"),
+                            ("hackathon", "Hackathon"),
+                            ("meetup", "Meetup"),
+                            ("webinar", "Webinar"),
+                            ("other", "Other"),
+                        ],
+                        default="meetup",
+                        max_length=20,
+                    ),
+                ),
+                ("event_date", models.DateTimeField()),
+                (
+                    "location",
+                    models.CharField(
+                        help_text="Physical location or Online", max_length=200
+                    ),
+                ),
+                ("meeting_link", models.URLField(blank=True, null=True)),
+                (
+                    "banner",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="event_banners/"
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'ordering': ['-event_date'],
+                "ordering": ["-event_date"],
             },
         ),
         migrations.CreateModel(
-            name='Project',
+            name="Project",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200)),
-                ('description', models.TextField()),
-                ('status', models.CharField(choices=[('planning', 'Planning'), ('in_progress', 'In Progress'), ('completed', 'Completed'), ('archived', 'Archived')], default='planning', max_length=20)),
-                ('tech_stack', models.JSONField(blank=True, default=list)),
-                ('github_repo', models.URLField(blank=True, null=True)),
-                ('demo_url', models.URLField(blank=True, null=True)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='project_images/')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200)),
+                ("description", models.TextField()),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("planning", "Planning"),
+                            ("in_progress", "In Progress"),
+                            ("completed", "Completed"),
+                            ("archived", "Archived"),
+                        ],
+                        default="planning",
+                        max_length=20,
+                    ),
+                ),
+                ("tech_stack", models.JSONField(blank=True, default=list)),
+                ("github_repo", models.URLField(blank=True, null=True)),
+                ("demo_url", models.URLField(blank=True, null=True)),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="project_images/"
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Task',
+            name="Task",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('description', models.TextField()),
-                ('status', models.CharField(choices=[('pending', 'Pending'), ('in_progress', 'In Progress'), ('submitted', 'Submitted'), ('verified', 'Verified')], default='pending', max_length=20)),
-                ('points', models.IntegerField(default=10, help_text='Points awarded upon completion')),
-                ('due_date', models.DateTimeField(blank=True, null=True)),
-                ('submission_link', models.URLField(blank=True, help_text='Link to work (PR, Doc, etc)', null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                ("description", models.TextField()),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "Pending"),
+                            ("in_progress", "In Progress"),
+                            ("submitted", "Submitted"),
+                            ("verified", "Verified"),
+                        ],
+                        default="pending",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "points",
+                    models.IntegerField(
+                        default=10, help_text="Points awarded upon completion"
+                    ),
+                ),
+                ("due_date", models.DateTimeField(blank=True, null=True)),
+                (
+                    "submission_link",
+                    models.URLField(
+                        blank=True, help_text="Link to work (PR, Doc, etc)", null=True
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
         ),
     ]
