@@ -78,24 +78,7 @@ const Sidebar = () => {
 
             {/* Footer Section */}
             <div className="p-4">
-                <button
-                    className={`nav-item relative group flex items-center gap-3 px-4 py-3 w-full rounded-lg text-gray-800 font-semibold bg-[#7FD4B8] transition-all duration-300 hover:bg-[#6ec2a5] hover:shadow-lg hover:-translate-y-0.5 ${isCollapsed ? 'justify-center' : ''}`}
-                    onClick={() => console.log('Login clicked')}
-                >
-                    <UserCheck size={20} className="flex-shrink-0" />
-                    {!isCollapsed && (
-                        <span className="whitespace-nowrap">Login</span>
-                    )}
-
-                    {/* Custom Tooltip for Login */}
-                    {isCollapsed && (
-                        <div className="absolute left-full ml-6 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none shadow-lg">
-                            Login
-                            {/* Arrow */}
-                            <div className="absolute top-1/2 -left-1 -mt-1 border-4 border-transparent border-r-gray-800"></div>
-                        </div>
-                    )}
-                </button>
+                {/* Login button removed */}
             </div>
         </div>
     );

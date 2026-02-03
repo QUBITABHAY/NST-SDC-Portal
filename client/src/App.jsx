@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Home from './pages/Home';
+import Login from './pages/Login';
 import Projects from './pages/Projects';
 import Leaderboard from './pages/Leaderboard';
 import Attendance from './pages/Attendance';
@@ -11,9 +12,10 @@ function App() {
   return (
     <div className="flex h-screen">
       <Sidebar />
-      <main className="flex-1 bg-gray-100">
+      <main className="flex-1 bg-gray-100 overflow-y-auto">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/attendance" element={<Attendance />} />

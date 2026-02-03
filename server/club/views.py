@@ -23,7 +23,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
-            return request.user and request.user.is_authenticated
+            return True
         return request.user and (request.user.is_club_admin or request.user.is_staff)
 
 
@@ -50,10 +50,9 @@ class DashboardViewSet(viewsets.ViewSet):
         event_serializer = EventSerializer(upcoming_events, many=True)
 
         # User's recent projects
-        user_projects = Project.objects.filter(
-            Q(lead=user) | Q(contributors=user)
-        ).distinct()[:3]
-        project_serializer = ProjectSerializer(user_projects, many=True)
+        # Show recent club projects (global) instead of just user's
+        recent_projects = Project.objects.all().order_by("-created_at")[:5]
+        project_serializer = ProjectSerializer(recent_projects, many=True)
 
         # User's attendance count
         attendance_count = Attendance.objects.filter(

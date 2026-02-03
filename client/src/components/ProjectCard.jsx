@@ -2,8 +2,10 @@ import { Github } from 'lucide-react';
 
 const ProjectCard = ({ project }) => {
     const badgeColors = {
-        contributor: 'bg-[#7FFF7F] text-gray-800',
-        maintainer: 'bg-[#FFD700] text-gray-800'
+        planning: 'bg-blue-200 text-blue-800',
+        in_progress: 'bg-[#7FFF7F] text-gray-800',
+        completed: 'bg-[#FFD700] text-gray-800',
+        archived: 'bg-gray-300 text-gray-800'
     };
 
     return (
@@ -12,69 +14,69 @@ const ProjectCard = ({ project }) => {
             <div className="flex justify-between items-start mb-3">
                 <h2 className="text-2xl font-bold text-gray-900">{project.name}</h2>
 
-                {/* Role Badge */}
-                <span className={`px-5 py-2 rounded-full text-base font-bold border-2 border-black shadow-lg ${badgeColors[project.role]}`}>
-                    {project.role}
+                {/* Status Badge */}
+                <span className={`px-5 py-2 rounded-full text-base font-bold border-2 border-black shadow-lg ${badgeColors[project.status] || 'bg-gray-200'}`}>
+                    {project.status_display || project.status}
                 </span>
             </div>
 
             {/* Team Lead */}
-            <div className="mb-1.5">
-                <span className="text-gray-400 text-sm font-bold">Team lead: </span>
-                <a
-                    href={project.teamLead.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#00CED1] hover:underline text-sm font-bold"
-                >
-                    {project.teamLead.name}
-                </a>
+            {project.lead_details && (
+                <div className="mb-1.5">
+                    <span className="text-gray-400 text-sm font-bold">Team lead: </span>
+                    <span className="text-[#00CED1] text-sm font-bold">
+                        {project.lead_details.full_name || project.lead_details.username}
+                    </span>
+                </div>
+            )}
+
+            {/* Description */}
+            <div className="mb-4 text-gray-600">
+                {project.description}
             </div>
 
-            {/* Recent Commit */}
-            <div className="mb-1.5">
-                <span className="text-gray-400 text-sm font-bold">Recent commit: </span>
-                <span className="text-[#32CD32] text-sm font-bold">{project.recentCommit.hash}</span>
-                <span className="text-gray-400 text-sm font-bold"> by </span>
-                <a
-                    href={project.recentCommit.author.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#00CED1] hover:underline text-sm font-bold"
-                >
-                    {project.recentCommit.author.name}
-                </a>
-            </div>
+            {/* Tech Stack */}
+            {project.tech_stack && project.tech_stack.length > 0 && (
+                <div className="mb-4">
+                    <span className="text-gray-400 text-sm font-bold">Tech Stack: </span>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                        {project.tech_stack.map((tech, index) => (
+                            <span key={index} className="bg-gray-200 px-2 py-1 rounded text-xs text-gray-700">
+                                {tech}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Members */}
-            <div className="mb-4">
-                <span className="text-gray-400 text-sm font-bold">Members: </span>
-                {project.members.map((member, index) => (
-                    <span key={index}>
-                        <a
-                            href={member.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[#00CED1] hover:underline text-sm font-bold"
-                        >
-                            {member.name}
-                        </a>
-                        {index < project.members.length - 1 && <span className="text-gray-400 text-sm font-bold"> </span>}
-                    </span>
-                ))}
-            </div>
+            {project.contributors_details && project.contributors_details.length > 0 && (
+                <div className="mb-4">
+                    <span className="text-gray-400 text-sm font-bold">Members: </span>
+                    {project.contributors_details.map((member, index) => (
+                        <span key={index}>
+                            <span className="text-[#00CED1] text-sm font-bold">
+                                {member.full_name || member.username}
+                            </span>
+                            {index < project.contributors_details.length - 1 && <span className="text-gray-400 text-sm font-bold">, </span>}
+                        </span>
+                    ))}
+                </div>
+            )}
 
             {/* GitHub Link */}
-            <div className="text-right pt-2 border-t border-gray-200">
-                <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-gray-900 text-sm font-bold inline-block"
-                >
-                    Visit on Github
-                </a>
-            </div>
+            {project.github_repo && (
+                <div className="text-right pt-2 border-t border-gray-200">
+                    <a
+                        href={project.github_repo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 hover:text-gray-900 text-sm font-bold inline-block"
+                    >
+                        Visit on Github
+                    </a>
+                </div>
+            )}
         </div>
     );
 };

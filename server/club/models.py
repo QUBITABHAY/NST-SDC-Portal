@@ -20,7 +20,7 @@ class Project(models.Model):
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="planning")
 
-    tech_stack = models.JSONField(default=list, blank=True)
+    tech_stack = models.JSONField(default=list, blank=True, null=True)
 
     github_repo = models.URLField(blank=True, null=True)
     demo_url = models.URLField(blank=True, null=True)
