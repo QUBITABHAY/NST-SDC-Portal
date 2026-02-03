@@ -1,8 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Projects from './pages/Projects';
 import Members from './pages/Members';
 import Events from './pages/Events';
@@ -12,12 +14,20 @@ import Meetings from './pages/Meetings';
 import Calendar from './pages/Calendar';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import LoadingScreen from './components/LoadingScreen';
 
 function App() {
+  const [initialLoad, setInitialLoad] = useState(true);
+
+  if (initialLoad) {
+    return <LoadingScreen onComplete={() => setInitialLoad(false)} />;
+  }
+
   return (
     <Routes>
       {/* Public Route */}
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>

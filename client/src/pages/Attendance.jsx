@@ -94,23 +94,27 @@ const Attendance = () => {
     const totalEvents = attended.length + missed.length;
 
     return (
-        <div className="p-8 max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-800 mb-8">My Attendance</h1>
+        <div className="p-8 max-w-6xl mx-auto min-h-full">
+            <h1 className="text-3xl font-bold font-mono tracking-wider flex items-center gap-3 text-white mb-8">
+                <span className="text-[#00E0FF] text-4xl">{`>`}</span>
+                ATTENDANCE LOG
+            </h1>
 
             {/* Stats Card */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8 flex items-center justify-between">
-                <div>
-                    <h2 className="text-lg font-semibold text-gray-600">Overall Attendance</h2>
-                    <p className="text-sm text-gray-400">Based on past meetings (Meetups)</p>
+            <div className="glass-panel p-8 rounded-xl border border-[#333] mb-8 flex items-center justify-between relative overflow-hidden group">
+                <div className="absolute right-0 top-0 w-64 h-64 bg-[#00E0FF] rounded-full blur-[150px] opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity"></div>
+                <div className="relative z-10">
+                    <h2 className="text-xl font-bold text-[#E0E0E0] font-mono tracking-wide uppercase">Total Sync Rate</h2>
+                    <p className="text-sm text-gray-400 font-mono mt-1">BASED ON PAST PROTOCOLS (MEETUPS)</p>
                 </div>
-                <div className="text-right">
-                    <span className={`text-5xl font-bold ${totalEvents === 0 ? 'text-gray-400' : percentage >= 75 ? 'text-green-500' :
-                        percentage >= 50 ? 'text-yellow-500' : 'text-red-500'
+                <div className="text-right relative z-10">
+                    <span className={`text-6xl font-bold font-mono tracking-tighter text-shadow-neon ${totalEvents === 0 ? 'text-gray-600' : percentage >= 75 ? 'text-green-400' :
+                        percentage >= 50 ? 'text-yellow-400' : 'text-red-500'
                         }`}>
                         {totalEvents > 0 ? `${percentage}%` : 'N/A'}
                     </span>
-                    <div className="text-sm text-gray-500 mt-1">
-                        {attended.length} Attended / {attended.length + missed.length} Total
+                    <div className="text-xs text-[#00E0FF] font-mono mt-2 uppercase tracking-widest border-t border-[#333] pt-2">
+                        {attended.length} SYNCED / {attended.length + missed.length} TOTAL
                     </div>
                 </div>
             </div>
@@ -118,21 +122,21 @@ const Attendance = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Attended Section */}
                 <div>
-                    <h2 className="text-xl font-bold text-gray-700 mb-4 flex items-center gap-2">
-                        <CheckCircle className="text-green-500" /> Attended Meetings
+                    <h2 className="text-xl font-bold text-green-400 mb-6 flex items-center gap-3 font-mono tracking-widest uppercase">
+                        <CheckCircle className="text-green-400" /> Synced Events
                     </h2>
                     <div className="space-y-4">
                         {attended.length === 0 && (
-                            <div className="p-4 bg-gray-50 rounded-lg text-gray-500 text-center">No meetings attended yet.</div>
+                            <div className="p-6 bg-[#1a1a1a] border border-dashed border-[#333] rounded-lg text-gray-500 text-center font-mono text-sm">NO SUCCESSFUL SYNCS LOGGED.</div>
                         )}
                         {attended.map((record) => (
-                            <div key={record.id} className="bg-white p-4 rounded-lg shadow-sm border border-green-100 flex justify-between items-center transition-transform hover:-translate-y-1">
+                            <div key={record.id} className="bg-[#1a1a1a]/50 p-4 rounded-lg border border-green-900/30 flex justify-between items-center transition-all hover:bg-[#1a1a1a] hover:border-green-500/50 group">
                                 <div>
-                                    <h3 className="font-semibold text-gray-800">{record.event.title}</h3>
-                                    <p className="text-sm text-gray-500">{new Date(record.event.event_date).toLocaleDateString()}</p>
+                                    <h3 className="font-bold text-gray-200 group-hover:text-green-400 transition-colors font-mono">{record.event.title}</h3>
+                                    <p className="text-xs text-gray-500 font-mono mt-1">{new Date(record.event.event_date).toLocaleDateString()}</p>
                                 </div>
-                                <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">
-                                    Present
+                                <span className="px-3 py-1 bg-green-500/10 text-green-500 border border-green-500/20 text-[10px] font-bold rounded font-mono uppercase tracking-wider">
+                                    Confirmed
                                 </span>
                             </div>
                         ))}
@@ -141,20 +145,20 @@ const Attendance = () => {
 
                 {/* Missed Section */}
                 <div>
-                    <h2 className="text-xl font-bold text-gray-700 mb-4 flex items-center gap-2">
-                        <XCircle className="text-red-500" /> Missed Meetings
+                    <h2 className="text-xl font-bold text-red-500 mb-6 flex items-center gap-3 font-mono tracking-widest uppercase">
+                        <XCircle className="text-red-500" /> Desync Events
                     </h2>
                     <div className="space-y-4">
                         {missed.length === 0 && (
-                            <div className="p-4 bg-gray-50 rounded-lg text-gray-500 text-center">Great job! You haven't missed any meetings.</div>
+                            <div className="p-6 bg-[#1a1a1a] border border-dashed border-[#333] rounded-lg text-gray-500 text-center font-mono text-sm">OPTIMAL SYNC RATE ACHIEVED. NO DESYNCS.</div>
                         )}
                         {missed.map((event) => (
-                            <div key={event.id} className="bg-white p-4 rounded-lg shadow-sm border border-red-100 flex justify-between items-center transition-transform hover:-translate-y-1">
+                            <div key={event.id} className="bg-[#1a1a1a]/50 p-4 rounded-lg border border-red-900/30 flex justify-between items-center transition-all hover:bg-[#1a1a1a] hover:border-red-500/50 group">
                                 <div>
-                                    <h3 className="font-semibold text-gray-800">{event.title}</h3>
-                                    <p className="text-sm text-gray-500">{new Date(event.event_date).toLocaleDateString()}</p>
+                                    <h3 className="font-bold text-gray-200 group-hover:text-red-500 transition-colors font-mono">{event.title}</h3>
+                                    <p className="text-xs text-gray-500 font-mono mt-1">{new Date(event.event_date).toLocaleDateString()}</p>
                                 </div>
-                                <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">
+                                <span className="px-3 py-1 bg-red-500/10 text-red-500 border border-red-500/20 text-[10px] font-bold rounded font-mono uppercase tracking-wider">
                                     Absent
                                 </span>
                             </div>

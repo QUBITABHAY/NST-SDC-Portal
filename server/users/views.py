@@ -64,7 +64,27 @@ class UserProfileView(APIView):
 
     def get(self, request):
         serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+        data = serializer.data
+
+        # Calculate Rank
+        # Rank is based on points, for active members
+        rank = User.objects.filter(
+            is_active=True, 
+            is_member=True, 
+            points__gt=request.user.points
+        ).count() + 1
+        data['rank'] = rank
+
+        # Calculate Attendance
+        # Prevent circular import if any, though likely fine to import at top
+        from club.models import Attendance
+        attendance_count = Attendance.objects.filter(
+            user=request.user, 
+            status="present"
+        ).count()
+        data['attendance_count'] = attendance_count
+
+        return Response(data)
 
     def patch(self, request):
         """Update user profile"""
