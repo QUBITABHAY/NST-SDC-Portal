@@ -45,3 +45,4 @@ __pycache__/
 .pyre/
 .python-version
 db.sqlite3
+.ruff_cache/
