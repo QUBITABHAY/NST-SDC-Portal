@@ -109,7 +109,7 @@ class LeaderboardSerializer(serializers.ModelSerializer):
 
 class PasswordChangeSerializer(serializers.Serializer):
     """Serializer for password change"""
-    
+
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True, min_length=8)
     confirm_new_password = serializers.CharField(required=True, min_length=8)

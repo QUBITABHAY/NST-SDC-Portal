@@ -68,21 +68,22 @@ class UserProfileView(APIView):
 
         # Calculate Rank
         # Rank is based on points, for active members
-        rank = User.objects.filter(
-            is_active=True, 
-            is_member=True, 
-            points__gt=request.user.points
-        ).count() + 1
-        data['rank'] = rank
+        rank = (
+            User.objects.filter(
+                is_active=True, is_member=True, points__gt=request.user.points
+            ).count()
+            + 1
+        )
+        data["rank"] = rank
 
         # Calculate Attendance
         # Prevent circular import if any, though likely fine to import at top
         from club.models import Attendance
+
         attendance_count = Attendance.objects.filter(
-            user=request.user, 
-            status="present"
+            user=request.user, status="present"
         ).count()
-        data['attendance_count'] = attendance_count
+        data["attendance_count"] = attendance_count
 
         return Response(data)
 
@@ -269,7 +270,7 @@ class LeaderboardView(APIView):
             # Just use the total points field
             users = queryset.order_by("-points")[:limit]
             # Since serializer expects 'points', the model field works fine.
-            # But let's verify if we need to return 'rank' as well. 
+            # But let's verify if we need to return 'rank' as well.
             # The original implementation used Window functions which is good for ranking.
             users = queryset.annotate(
                 rank=Window(expression=RowNumber(), order_by=F("points").desc())
@@ -283,7 +284,7 @@ class LeaderboardView(APIView):
                 start_date = now - datetime.timedelta(days=7)
             elif period == "monthly":
                 start_date = now - datetime.timedelta(days=30)
-            
+
             # Aggregate points from Tasks and Attendance
             # Task: status='verified' (or 'submitted' depending on logic)
             # Attendance: status='present' (assuming 10 points per attendance, need to verify or assume)
@@ -294,37 +295,49 @@ class LeaderboardView(APIView):
 
             # Better approach for Coalesce
             from django.db.models.functions import Coalesce
-            
-            users = queryset.annotate(
-                task_points=Coalesce(Sum(
-                    Case(
-                        When(
-                            tasks__updated_at__gte=start_date,
-                            tasks__status__in=["verified", "submitted"],
-                            then="tasks__points",
+
+            users = (
+                queryset.annotate(
+                    task_points=Coalesce(
+                        Sum(
+                            Case(
+                                When(
+                                    tasks__updated_at__gte=start_date,
+                                    tasks__status__in=["verified", "submitted"],
+                                    then="tasks__points",
+                                ),
+                                default=0,
+                                output_field=IntegerField(),
+                            )
                         ),
-                        default=0,
-                        output_field=IntegerField(),
-                    )
-                ), 0),
-                attendance_points=Coalesce(Count(
-                    Case(
-                        When(
-                            attendances__marked_at__gte=start_date, 
-                            attendances__status="present",
-                            then=1,
+                        0,
+                    ),
+                    attendance_points=Coalesce(
+                        Count(
+                            Case(
+                                When(
+                                    attendances__marked_at__gte=start_date,
+                                    attendances__status="present",
+                                    then=1,
+                                ),
+                                output_field=IntegerField(),
+                            )
                         ),
-                        output_field=IntegerField(),
+                        0,
                     )
-                ), 0) * ATTENDANCE_POINTS,
-            ).annotate(
-                period_points=F("task_points") + F("attendance_points")
-            ).annotate(
-                rank=Window(expression=RowNumber(), order_by=F("period_points").desc())
-            ).order_by("-period_points")[:limit]
+                    * ATTENDANCE_POINTS,
+                )
+                .annotate(period_points=F("task_points") + F("attendance_points"))
+                .annotate(
+                    rank=Window(
+                        expression=RowNumber(), order_by=F("period_points").desc()
+                    )
+                )
+                .order_by("-period_points")[:limit]
+            )
 
             # Override points for serialization
             for user in users:
                 user.points = user.period_points
-                
+
         return Response(LeaderboardSerializer(users, many=True).data)
